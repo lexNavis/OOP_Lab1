@@ -12,11 +12,16 @@ int main() {
     SelectObject(hdc, hBrush);
     int x = 600, y = 600; // Измените координаты
     Fish AFish(x, y);
+    PatrioticFish BFish(400, 400);
     Rectangle(hdc, 0, 0, 1920, 1080);
     while(1)
     {
         AFish.Show();
-        AFish.drag(PPM);
+        BFish.Show();
+        system("pause");
+        BFish.patrioticForm();
+        BFish.drag(PPM);
+        //AFish.drag(PPM);
     }
 
     ReleaseDC(hWnd, hdc); // Освободите контекст устройства
