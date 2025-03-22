@@ -107,6 +107,19 @@ public:
 
 	virtual void Show();
 	virtual void Hide();
-	void moveTo(int new_x, int new_y);
+	virtual void moveTo(int new_x, int new_y); //move different parts = virtual
 	void drag(int step);
+};
+
+class PatrioticFish : public Fish {
+protected:
+	Ellipse_* beret;
+public:
+	PatrioticFish(int new_x, int new_y);
+	~PatrioticFish();
+	virtual void Show();
+	virtual void Hide();
+	virtual void moveTo(int new_x, int new_y);
+	void patrioticForm();
+	void baseForm();
 };
