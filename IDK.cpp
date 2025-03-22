@@ -292,3 +292,61 @@ void Fish::setBottomFin(Triangle* new_bottom_fin)	{ bottom_fin = new_bottom_fin;
 void Fish::setEye(Circle* new_eye)					{ eye = new_eye; }
 void Fish::setMouth(Triangle* new_mouth)			{ mouth = new_mouth; }
 
+//Defininition of PatrioticFish methods
+
+PatrioticFish::PatrioticFish(int new_x, int new_y) : Fish(new_x, new_y) {
+	body->setColor(0, 100, 0);
+	rear_fin->setColor(135, 206, 235);
+	top_fin->setColor(135, 206, 235);
+	bottom_fin->setColor(135, 206, 235);
+
+	beret = new Ellipse_(new_x, new_y - body->getFocus2() - 5, 50, 10);
+	beret->setColor(255, 0, 0);
+}
+PatrioticFish::~PatrioticFish() {}
+
+void PatrioticFish::Show() {
+	rear_fin->Show();
+	top_fin->Show();
+	bottom_fin->Show();
+	body->Show();
+	eye->Show();
+	mouth->Show();
+	beret->Show();
+}
+void PatrioticFish::Hide() {
+	rear_fin->Hide();
+	top_fin->Hide();
+	bottom_fin->Hide();
+	body->Hide();
+	eye->Hide();
+	mouth->Hide();
+	beret->Hide();
+}
+void PatrioticFish::moveTo(int new_x, int new_y) {
+	Hide();	//чтобы картинка нормально отображалась
+	rear_fin->moveTo(new_x - body->getFocus1(), new_y);
+	top_fin->moveTo(new_x + 25, new_y - body->getFocus2() - 15);
+	bottom_fin->moveTo(new_x - 25, new_y + body->getFocus2() + 15);
+	body->moveTo(new_x, new_y);
+	eye->moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
+	mouth->moveTo(new_x + body->getFocus1() - 20, new_y + 10);
+	beret->moveTo(new_x, new_y - body->getFocus2() - 5);
+	Show(); //убрать затирания
+}
+void PatrioticFish::patrioticForm() {
+	Hide();
+	body->setColor(0, 0, 255);
+	rear_fin->setColor(0, 0, 255);
+	top_fin->setColor(255, 255, 255);
+	bottom_fin->setColor(255, 0, 0);
+	Show();
+}
+void PatrioticFish::baseForm() {
+	Hide();
+	body->setColor(0, 100, 0);
+	rear_fin->setColor(135, 206, 235);
+	top_fin->setColor(135, 206, 235);
+	bottom_fin->setColor(135, 206, 235);
+	Show();
+}
