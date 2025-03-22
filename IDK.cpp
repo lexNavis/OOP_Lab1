@@ -273,7 +273,7 @@ void Fish::drag(int step) {
 		else if (KEY_DOWN(VK_UP))    pos_y = (pos_y - step) % 1080;
 		else if (KEY_DOWN(VK_DOWN))  pos_y = (pos_y + step) % 1080; 
 		moveTo(pos_x, pos_y);
-		Sleep(100);//чтоб эпилепсии не было
+		Sleep(50);//чтоб эпилепсии не было
 	}
 }
 

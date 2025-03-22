@@ -3,6 +3,7 @@
 #include "IDK.h"
 using namespace std;
 
+int PPM = 10; //Pixels Per Move
 
 int main() {
     HWND hWnd = FindWindowA("ConsoleWindowClass", NULL);
@@ -15,7 +16,7 @@ int main() {
     while(1)
     {
         AFish.Show();
-        AFish.drag(40);
+        AFish.drag(PPM);
     }
 
     ReleaseDC(hWnd, hdc); // Освободите контекст устройства
