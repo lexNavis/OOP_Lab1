@@ -143,5 +143,12 @@ public:
 
 class DiscoFish : public Fish {
 protected:
-
+	Disc* disc;
+public:
+	DiscoFish(int new_x, int new_y);
+	~DiscoFish();
+	virtual void Show();
+	virtual void Hide();
+	virtual void moveTo(int new_x, int new_y);
+	void discoForm();
 };
