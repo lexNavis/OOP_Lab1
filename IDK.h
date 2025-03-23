@@ -95,6 +95,25 @@ public:
 	virtual void Hide();
 
 };
+
+//abstract obstacle class
+class Obstacle : public Location {
+private:
+	int* top_border;	// [x,y]
+	int* left_border;
+	int* bottom_border;
+	int* right_border;
+public:
+	Obstacle(int new_x, int new_y);
+	~Obstacle();
+	//will be overwritten in child class
+	virtual void Show();
+	virtual void Hide();
+	virtual bool hasCollisionWith(Fish* fish);
+};
+
+
+
 //common fish
 class Fish {
 protected:
