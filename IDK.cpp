@@ -268,6 +268,13 @@ void Disc::Hide() {
 	DeleteObject(hBrush);
 }
 
+//defining Obstacle methods
+Obstacle::Obstacle(int new_x, int new_y) : Location(new_x, new_y) {}
+Obstacle::~Obstacle() {}
+void Obstacle::Show() {}
+void Obstacle::Hide() {}
+bool Obstacle::hasCollisionWith(Fish* fish) {}
+
 //defining Fish methods
 Fish::Fish(int new_x, int new_y) {
 	body =		 new Ellipse_(new_x, new_y, 100, 40);
