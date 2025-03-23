@@ -87,13 +87,4 @@ int main() {
     ReleaseDC(hWnd, hdc); // Освободите контекст устройства
     return 0;
 }
-/*ACircle.Show();
- //AEllipse.Show();*/       
-//ATriangle.Show();
-//system("pause");
-///*ACircle.Hide();
-//AEllipse.Hide(); */
-//ATriangle.Expand(30);
-//system("pause");
-//ATriangle.Reduce(30);
-//system("pause");    
+   
