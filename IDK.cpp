@@ -268,23 +268,25 @@ void Disc::Hide() {
 	DeleteObject(hBrush);
 }
 
-//defining Obstacle methods
-Obstacle::Obstacle(int new_x, int new_y) : Location(new_x, new_y) {}
-Obstacle::~Obstacle() {}
-void Obstacle::Show() {}
-void Obstacle::Hide() {}
-bool Obstacle::hasCollisionWith(Fish* fish) {}
-
 //defining Fish methods
 Fish::Fish(int new_x, int new_y) {
 	body =		 new Ellipse_(new_x, new_y, 100, 40);
 	int f1 = body->getFocus1();
 	int f2 = body->getFocus2();
-	rear_fin =	 new Triangle(new_x - f1, new_y, 70, 100); //height = 70 (35=height/2), base = 100
-	top_fin =	 new Triangle(new_x + 25, new_y - f2 - 15, 50, 60); //height = 50, base = 100
-	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, -50, -60); //height = 70, base = 100
+	int rear_fin_height = 70, rear_fin_base = 100;
+	int top_fin_height = 50, top_fin_base = 60;
+	int bottom_fin_height = -50, bottom_fin_base = -60;
+	rear_fin =	 new Triangle(new_x - f1, new_y, rear_fin_height, rear_fin_base); //height = 70 (35=height/2), base = 100
+	top_fin =	 new Triangle(new_x + 25, new_y - f2 - 15, top_fin_height, top_fin_base); //height = 50, base = 100
+	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, bottom_fin_height, bottom_fin_base); //height = 70, base = 100
 	eye =		 new Circle(new_x + f1 / 2 + 30, new_y - 10, 7);
 	mouth =		 new Triangle(new_x + f1 - 20, new_y + 10, -30, -8);
+	//мб уберу короче
+	borders	=	 new int[4]; // { x1, x2, y1, y2 }
+	borders[0] = { new_x - f1 - rear_fin_height/2};		//основание заднего плавника
+	borders[1] = { new_x + f1 };						//перед рыбы
+	borders[2] = { new_y - f2 - 15 - top_fin_base / 2};	//верх
+	borders[3] = { new_x + f2 + 15 + bottom_fin_base / 2};	//низ
 
 	//Setting color
 	body		->	setColor(128, 128, 128);
@@ -294,7 +296,6 @@ Fish::Fish(int new_x, int new_y) {
 	eye			->	setColor(0, 0, 0);
 	mouth		->	setColor(255, 192, 203);
 }
-
 Fish::~Fish() {
 	delete body;
 	delete rear_fin;
@@ -312,7 +313,6 @@ void Fish::Show() {
 	eye			->	Show();
 	mouth		->	Show();
 }
-
 void Fish::Hide() {
 	body		->	Hide();
 	rear_fin	->	Hide();
@@ -321,7 +321,40 @@ void Fish::Hide() {
 	eye			->	Hide();
 	mouth		->	Hide();
 }
+bool Fish::hasCollisionWith(Obstacle* obstacle) {	// x1 <= x <= x2 && y1 <= y <= y2 для четырех точек
+	int f1 = body->getFocus1();
+	int f2 = body->getFocus2();
+	int rear_fin_height = getRearFin()->getHeight(), rear_fin_base = getRearFin()->getBase();
+	int top_fin_height = getTopFin()->getHeight(), top_fin_base = getTopFin()->getBase();
+	int bottom_fin_height = getBottomFin()->getHeight(), bottom_fin_base = getBottomFin()->getBase();
+	//Оставить ли эту приколюху с массивом?
+	borders[0] = { getBody()->getX() - f1 - rear_fin_height / 2};		//основание заднего плавника
+	borders[1] = { getBody()->getX() + f1 };							//перед рыбы
+	borders[2] = { getBody()->getY() - f2 - 15 - top_fin_base / 2 };	//верх
+	borders[3] = { getBody()->getY() + f2 + 15 + bottom_fin_base / 2 };	//низ
 
+	int x = obstacle->getX(), y = obstacle->getY();
+	int size_x = obstacle->getsizeX(), size_y = obstacle->getsizeY();
+	if (
+		(((x - size_x / 2 >= borders[0]) && (x - size_x / 2 <= borders[1])) &&
+		((y - size_y / 2 >= borders[2]) && (y - size_y / 2 <= borders[3])))		
+		||
+		(((x - size_x / 2 >= borders[0]) && (x - size_x / 2 <= borders[1])) &&
+		((y + size_y / 2 >= borders[2]) && (y + size_y / 2 <= borders[3])))		
+		||
+		(((x + size_x / 2 >= borders[0]) && (x + size_x / 2 <= borders[1])) &&
+		((y - size_y / 2 >= borders[2]) && (y - size_y / 2 <= borders[3])))		
+		||
+		(((x + size_x / 2 >= borders[0]) && (x + size_x / 2 <= borders[1])) &&
+		((y + size_y / 2 >= borders[2]) && (y + size_y / 2 <= borders[3])))
+		)
+		return true;
+
+	else
+		return false;
+}
+void Fish::superPower() {}
+void Fish::baseForm() {}
 void Fish::moveTo(int new_x, int new_y) {
 	Hide();	//чтобы картинка нормально отображалась
 	rear_fin	->	moveTo(new_x - body->getFocus1(), new_y);
@@ -332,7 +365,7 @@ void Fish::moveTo(int new_x, int new_y) {
 	mouth		->	moveTo(new_x + body->getFocus1() - 20, new_y + 10);
 	Show(); //убрать затирания
 }
-void Fish::drag(int step) {
+void Fish::drag(int step, Obstacle* obstacle) {
 	//за основу берем центр эллипса
 	int pos_x = getBody()->getX();
 	int pos_y = getBody()->getY();
@@ -343,6 +376,13 @@ void Fish::drag(int step) {
 		else if (KEY_DOWN(VK_UP))    pos_y = (pos_y - step) % 1080;
 		else if (KEY_DOWN(VK_DOWN))  pos_y = (pos_y + step) % 1080; 
 		moveTo(pos_x, pos_y);
+		if (obstacle && hasCollisionWith(obstacle)) {
+			cout << "Столкнулись!\n";
+			//obstacle->Hide();
+			superPower();
+		}
+		else
+			baseForm();
 		Sleep(50);//чтоб эпилепсии не было
 	}
 }
@@ -353,14 +393,15 @@ Triangle* Fish::getTopFin()     { return top_fin; }
 Triangle* Fish::getBottomFin()  { return bottom_fin; }
 Circle*   Fish::getEye()		{ return eye; }
 Triangle* Fish::getMouth()		{ return mouth; }
+int*	  Fish::getBorders()	{ return borders; }
 
 //Удалю, если не понадобится
-void Fish::setBody(Ellipse_* new_body)				{ body = new_body; }
-void Fish::setRearFin(Triangle* new_rear_fin)		{ rear_fin = new_rear_fin; }
-void Fish::setTopFin(Triangle* new_top_fin)			{ top_fin = new_top_fin; }
-void Fish::setBottomFin(Triangle* new_bottom_fin)	{ bottom_fin = new_bottom_fin; }
-void Fish::setEye(Circle* new_eye)					{ eye = new_eye; }
-void Fish::setMouth(Triangle* new_mouth)			{ mouth = new_mouth; }
+//void Fish::setBody(Ellipse_* new_body)				{ body = new_body; }
+//void Fish::setRearFin(Triangle* new_rear_fin)		{ rear_fin = new_rear_fin; }
+//void Fish::setTopFin(Triangle* new_top_fin)			{ top_fin = new_top_fin; }
+//void Fish::setBottomFin(Triangle* new_bottom_fin)	{ bottom_fin = new_bottom_fin; }
+//void Fish::setEye(Circle* new_eye)					{ eye = new_eye; }
+//void Fish::setMouth(Triangle* new_mouth)			{ mouth = new_mouth; }
 
 //Defininition of PatrioticFish methods
 
@@ -403,7 +444,7 @@ void PatrioticFish::moveTo(int new_x, int new_y) {
 	beret		->	moveTo(new_x, new_y - body->getFocus2() - 5);
 	Show(); //убрать затирания
 }
-void PatrioticFish::patrioticForm() {
+void PatrioticFish::superPower() {
 	Hide();
 	body		->	setColor(0, 0, 255);
 	rear_fin	->	setColor(0, 0, 255);
@@ -465,7 +506,7 @@ void DiscoFish::moveTo(int new_x, int new_y) {
 	Show(); //убрать затирания
 }
 
-void DiscoFish::discoForm() { //смена цвета и движения из стороны в сторону
+void DiscoFish::superPower() { //смена цвета и движения из стороны в сторону
 	while (1) {
 		if (KEY_DOWN(VK_ESCAPE)) {
 			body		->	setColor(255, 255, 0);
@@ -502,3 +543,56 @@ void DiscoFish::discoForm() { //смена цвета и движения из стороны в сторону
 		moveTo(getBody()->getX() + 100, getBody()->getY() + 100);
 	}
 }
+void DiscoFish::baseForm() {
+	body->setColor(255, 255, 0);
+	rear_fin->setColor(255, 165, 0);
+	top_fin->setColor(255, 165, 0);
+	bottom_fin->setColor(255, 165, 0);
+}
+
+//defining Obstacle methods
+Obstacle::Obstacle(int new_x, int new_y,int new_szX, int new_szY) : Location(new_x, new_y) {
+	size_x = new_szX;
+	size_y = new_szY;
+}
+Obstacle::~Obstacle() {}
+void Obstacle::Show() {}
+void Obstacle::Hide() {}
+int  Obstacle::getsizeX() { return size_x; }
+int  Obstacle::getsizeY() { return size_y; }
+void Obstacle::setsizeX(int new_szX) { size_x = new_szX; }
+void Obstacle::setsizeY(int new_szY) { size_y = new_szY; }
+//defining flag methods
+Flag::Flag(int new_x, int new_y, int new_szX, int new_szY) : Obstacle(new_x, new_y, new_szX, new_szY) {
+	
+}
+Flag::~Flag() {}
+void Flag::Show() {
+	HPEN hPen = CreatePen(PS_SOLID, PEN_WIDTH, RGB(0, 0, 0));
+	SelectObject(hdc, hPen);
+	Rectangle(hdc, x - size_x / 2, y - size_y / 2, x + size_x / 2, y + size_y / 2);
+	DeleteObject(hPen);
+
+	HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255));
+	SelectObject(hdc, hBrush);
+	Rectangle(hdc, x - size_x / 2, y - size_y / 2, x + size_x / 2, y - size_y / 6);
+	hBrush = CreateSolidBrush(RGB(0, 0, 255));
+	SelectObject(hdc, hBrush);
+	Rectangle(hdc, x - size_x / 2, y - size_y / 6, x + size_x / 2, y + size_y / 6);
+	hBrush = CreateSolidBrush(RGB(255, 0, 0));
+	SelectObject(hdc, hBrush);
+	Rectangle(hdc, x - size_x / 2, y + size_y / 6, x + size_x / 2, y + size_y / 2);
+	DeleteObject(hBrush);
+}
+void Flag::Hide() {
+	HPEN hPen = CreatePen(PS_SOLID, PEN_WIDTH, RGB(255, 255, 255));
+	SelectObject(hdc, hPen);
+	Rectangle(hdc, x - size_x / 2, y - size_y / 2, x + size_x / 2, y + size_y / 2);
+	DeleteObject(hPen);
+
+	HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255));
+	SelectObject(hdc, hBrush);
+	Rectangle(hdc, x - size_x / 2, y - size_y / 2, x + size_x / 2, y + size_y / 2);
+	DeleteObject(hBrush);
+}
+
