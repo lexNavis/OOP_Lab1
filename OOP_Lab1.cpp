@@ -51,34 +51,34 @@ int main() {
             break;
         }
         
-            case 2: {
-                cout << "Введите координаты (x,y): \n";
-                cin >> x >> y;
-                PatrioticFish BFish(x, y);
-                while (!EXIT_TASK) {
-                    cout << "Выберите действие над базовой рыбой: \n"
-                        << "1 - Показать на экране\n"
-                        << "2 - Скрыть\n"
-                        << "3 - Перемещать\n"
-                        << "4 - Патриотичная форма\n"
-                        << "5 - Вернуться в обычную форму\n"
-                        << "Другая цифра - Вернуться на главную\n";
-                    cin >> choice;
-                    switch (choice) {
-                    case 1: { BFish.Show();    break; }
-                    case 2: { BFish.Hide();    break; }
-                    case 3: { BFish.drag(PPM); break; }
-                    case 4: { BFish.patrioticForm(); break; }
-                    case 5: { BFish.baseForm(); break; }
-                    default: {
-                        EXIT_TASK = true;
-                        cout << "Возращаем...\n";
-                        break;
-                    }
-                    }
+        case 2: {
+            cout << "Введите координаты (x,y): \n";
+            cin >> x >> y;
+            PatrioticFish BFish(x, y);
+            while (!EXIT_TASK) {
+                cout << "Выберите действие над базовой рыбой: \n"
+                    << "1 - Показать на экране\n"
+                    << "2 - Скрыть\n"
+                    << "3 - Перемещать\n"
+                    << "4 - Патриотичная форма\n"
+                    << "5 - Вернуться в обычную форму\n"
+                    << "Другая цифра - Вернуться на главную\n";
+                cin >> choice;
+                switch (choice) {
+                case 1: { BFish.Show();    break; }
+                case 2: { BFish.Hide();    break; }
+                case 3: { BFish.drag(PPM); break; }
+                case 4: { BFish.patrioticForm(); break; }
+                case 5: { BFish.baseForm(); break; }
+                default: {
+                    EXIT_TASK = true;
+                    cout << "Возращаем...\n";
+                    break;
                 }
-                break;
-            
+                }
+            }
+            break;
+        }
             default:
                 break;
         }
