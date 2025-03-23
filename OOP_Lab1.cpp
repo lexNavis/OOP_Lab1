@@ -23,7 +23,7 @@ int main() {
         cout << "Выберите действие: \n"
             << "1 - Создать базовую рыбу\n"
             << "2 - Создать рыбу - патриота\n"
-            << "3 - Создать диск (временно)\n";
+            << "3 - Создать дискорыбу \n";
         int choice;
         cin >> choice;
         switch (choice) {
@@ -83,8 +83,27 @@ int main() {
         case 3: {
             cout << "Введите координаты (x,y): \n";
             cin >> x >> y;
-            Disc CDisk(x, y, 40, 20, 4);
-            CDisk.Show();
+            DiscoFish CFish(x, y);
+            while (!EXIT_TASK) {
+                cout << "Выберите действие над базовой рыбой: \n"
+                    << "1 - Показать на экране\n"
+                    << "2 - Скрыть\n"
+                    << "3 - Перемещать\n"
+                    << "4 - Диско - форма\n"
+                    << "Другая цифра - Вернуться на главную\n";
+                cin >> choice;
+                switch (choice) {
+                case 1: { CFish.Show();    break; }
+                case 2: { CFish.Hide();    break; }
+                case 3: { CFish.drag(PPM); break; }
+                case 4: { CFish.discoForm(); break; }
+                default: {
+                    EXIT_TASK = true;
+                    cout << "Возращаем...\n";
+                    break;
+                }
+                }
+            }
             break;
         }
             default:
