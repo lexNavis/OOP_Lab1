@@ -77,6 +77,24 @@ public:
 	void Reduce(int deltarad);*/
 };
 
+class Disc : public Point {
+private:
+	int radius1;
+	int radius2;
+	int radius3;
+public:
+	Disc(int new_x, int new_y, int new_r1, int new_r2, int new_r3);
+	~Disc();
+	int  getRadius1();
+	void setRadius1(int new_r1);
+	int  getRadius2();
+	void setRadius2(int new_r2);
+	int  getRadius3();
+	void setRadius3(int new_r3);
+	virtual void Show();
+	virtual void Hide();
+
+};
 //common fish
 class Fish {
 protected:
@@ -121,4 +139,9 @@ public:
 	virtual void moveTo(int new_x, int new_y);
 	void patrioticForm();
 	void baseForm();
+};
+
+class DiscoFish : public Fish {
+protected:
+
 };
