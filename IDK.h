@@ -8,11 +8,10 @@ class Location {
 	public:
 		Location(int new_x, int new_y);
 		~Location();
-		int getX();
+		int  getX();
 		void setX(int new_x);
-		int getY();
+		int  getY();
 		void setY(int new_y);
-		bool operator==(const Location& other) const;
 };
 
 class Point : public Location {
@@ -36,7 +35,7 @@ protected:
 public:
 	Circle(int new_x, int new_y, int new_radius);
 	~Circle();
-	int getRadius();
+	int  getRadius();
 	void setRadius(int new_radius);
 	virtual void Show();
 	virtual void Hide();
@@ -51,8 +50,8 @@ protected:
 public:
 	Ellipse_(int new_x, int new_y, int new_focus1,  int new_focus2);
 	~Ellipse_();
-	int getFocus1();
-	int getFocus2();
+	int  getFocus1();
+	int  getFocus2();
 	void setFocus1(int new_focus1);
 	void setFocus2(int new_focus2);
 	virtual void Show();
@@ -68,8 +67,8 @@ protected:
 public:
 	Triangle(int new_x, int new_y, int new_height, int new_base);
 	~Triangle();
-	int getHeight();
-	int getBase();
+	int  getHeight();
+	int  getBase();
 	void setHeight(int new_height);
 	void setBase(int new_base);
 	virtual void Show();
@@ -85,7 +84,7 @@ protected:
 	Triangle* rear_fin; //задний плавник
 	Triangle* top_fin;
 	Triangle* bottom_fin;
-	Circle* eye;
+	Circle*   eye;
 	Triangle* mouth;
 public:
 	Fish(int new_x, int new_y);
@@ -94,7 +93,7 @@ public:
 	Triangle* getRearFin(); // задний плавник
 	Triangle* getTopFin();
 	Triangle* getBottomFin();
-	Circle* getEye();
+	Circle*   getEye();
 	Triangle* getMouth();
 
 	//Удалю, если не понадобится

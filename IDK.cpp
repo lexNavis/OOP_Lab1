@@ -12,12 +12,16 @@ int PEN_WIDTH = 1;
 
 //defining Location methods
 
-Location::Location(int new_x, int new_y) { x = new_x; y = new_y; }
+Location::Location(int new_x, int new_y) { 
+	x = new_x; 
+	y = new_y; 
+}
 Location::~Location() {}
-int Location::getX() { return x; }
-int Location::getY() { return y; }
-void Location::setX(int new_x) { x = new_x; }
-void Location::setY(int new_y) { y = new_y; }
+
+int  Location::getX()			{ return x; }
+int  Location::getY()			{ return y; }
+void Location::setX(int new_x)	{ x = new_x; }
+void Location::setY(int new_y)	{ y = new_y; }
 
 //defining Point methods
 
@@ -27,6 +31,7 @@ Point::Point(int new_x, int new_y) : Location(new_x, new_y) {
 	setColor(0, 0, 0); //мб уберу отсюда
 }
 Point::~Point() {}
+
 void Point::setVisible(bool new_visible) { visible = new_visible; }
 bool Point::isVisible() { return visible; }
 void Point::setColor(int red, int green, int blue) {
@@ -54,8 +59,8 @@ void Point::Hide() {
 Circle::Circle(int new_x, int new_y, int new_radius) : Point(new_x, new_y) { radius = new_radius; }
 Circle::~Circle() {}
 
-int Circle::getRadius() { return radius; }
-void Circle::setRadius(int new_radius) { radius = new_radius; }
+int  Circle::getRadius()				{ return radius; }
+void Circle::setRadius(int new_radius)	{ radius = new_radius; }
 
 void Circle::Show() {
 	visible = true;
@@ -90,13 +95,12 @@ Ellipse_::Ellipse_(int new_x, int new_y, int new_focus1, int new_focus2) : Point
 	focus1 = new_focus1;
 	focus2 = new_focus2;
 }
-
 Ellipse_::~Ellipse_() {}
 
-int Ellipse_::getFocus1() { return focus1; }
-int Ellipse_::getFocus2() { return focus2; }
-void Ellipse_::setFocus1(int new_focus1) { focus1 = new_focus1; }
-void Ellipse_::setFocus2(int new_focus2) { focus2 = new_focus2; }
+int  Ellipse_::getFocus1()					{ return focus1; }
+int  Ellipse_::getFocus2()					{ return focus2; }
+void Ellipse_::setFocus1(int new_focus1)	{ focus1 = new_focus1; }
+void Ellipse_::setFocus2(int new_focus2)	{ focus2 = new_focus2; }
 
 void Ellipse_::Show() {
 	visible = true;
@@ -142,12 +146,12 @@ Triangle::Triangle(int new_x, int new_y, int new_height, int new_base) : Point(n
 	//points[1] = { x - height / 2, y + base / 2 };
 	//points[2] = { x + height / 2, y };				//вершина лежит на ОХ
 }
+Triangle::~Triangle() {}
 
-Triangle::~Triangle() { /*delete[] points;*/ }
-int Triangle::getHeight()	{ return height; }
-int Triangle::getBase()		{ return base; }
-void Triangle::setHeight(int new_height) { height = new_height; }
-void Triangle::setBase(int new_base)	 { base = new_base; }
+int  Triangle::getHeight()					{ return height; }
+int  Triangle::getBase()					{ return base; }
+void Triangle::setHeight(int new_height)	{ height = new_height; }
+void Triangle::setBase(int new_base)		{ base = new_base; }
 
 void Triangle::Show() {
 	POINT* points = new POINT[3];
@@ -204,25 +208,21 @@ void Triangle::Hide() {
 //defining Fish methods
 Fish::Fish(int new_x, int new_y) {
 	body = new Ellipse_(new_x, new_y, 100, 40);
-	body->setColor(128, 128, 128);
-
 	int f1 = body->getFocus1();
 	int f2 = body->getFocus2();
-
 	rear_fin = new Triangle(new_x - f1, new_y, 70, 100); //height = 70 (35=height/2), base = 100
-	rear_fin->setColor(211, 211, 211);
-
 	top_fin = new Triangle(new_x + 25, new_y - f2 - 15, 50, 60); //height = 50, base = 100
-	top_fin->setColor(211, 211, 211);
-
 	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, -50, -60); //height = 70, base = 100
-	bottom_fin->setColor(211, 211, 211);
-
 	eye = new Circle(new_x + f1 / 2 + 30, new_y - 10, 7);
-	eye->setColor(0, 0, 0);
-
 	mouth = new Triangle(new_x + f1 - 20, new_y + 10, -30, -8);
-	mouth->setColor(255, 192, 203);
+
+	//Setting color
+	body		->	setColor(128, 128, 128);
+	rear_fin	->	setColor(211, 211, 211);
+	top_fin		->	setColor(211, 211, 211);
+	bottom_fin	->	setColor(211, 211, 211);
+	eye			->	setColor(0, 0, 0);
+	mouth		->	setColor(255, 192, 203);
 }
 
 Fish::~Fish() {
@@ -235,31 +235,31 @@ Fish::~Fish() {
 }
 
 void Fish::Show() {
-	rear_fin->Show();
-	top_fin->Show();
-	bottom_fin->Show();
-	body->Show();
-	eye->Show();
-	mouth->Show();
+	rear_fin	->	Show();
+	top_fin		->	Show();
+	bottom_fin	->	Show();
+	body		->	Show();
+	eye			->	Show();
+	mouth		->	Show();
 }
 
 void Fish::Hide() {
-	body->Hide();
-	rear_fin->Hide();
-	top_fin->Hide();
-	bottom_fin->Hide();
-	eye->Hide();
-	mouth->Hide();
+	body		->	Hide();
+	rear_fin	->	Hide();
+	top_fin		->	Hide();
+	bottom_fin	->	Hide();
+	eye			->	Hide();
+	mouth		->	Hide();
 }
 
 void Fish::moveTo(int new_x, int new_y) {
 	Hide();	//чтобы картинка нормально отображалась
-	rear_fin->moveTo(new_x - body->getFocus1(), new_y); // задний плавник
-	top_fin->moveTo(new_x + 25, new_y - body->getFocus2() - 15);
-	bottom_fin->moveTo(new_x - 25, new_y + body->getFocus2() + 15);
-	body->moveTo(new_x, new_y);
-	eye->moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
-	mouth->moveTo(new_x + body->getFocus1() - 20, new_y + 10);
+	rear_fin	->	moveTo(new_x - body->getFocus1(), new_y);
+	top_fin		->	moveTo(new_x + 25, new_y - body->getFocus2() - 15);
+	bottom_fin	->	moveTo(new_x - 25, new_y + body->getFocus2() + 15);
+	body		->	moveTo(new_x, new_y);
+	eye			->	moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
+	mouth		->	moveTo(new_x + body->getFocus1() - 20, new_y + 10);
 	Show(); //убрать затирания
 }
 void Fish::drag(int step) {
@@ -295,58 +295,58 @@ void Fish::setMouth(Triangle* new_mouth)			{ mouth = new_mouth; }
 //Defininition of PatrioticFish methods
 
 PatrioticFish::PatrioticFish(int new_x, int new_y) : Fish(new_x, new_y) {
-	body->setColor(0, 100, 0);
-	rear_fin->setColor(135, 206, 235);
-	top_fin->setColor(135, 206, 235);
-	bottom_fin->setColor(135, 206, 235);
-
 	beret = new Ellipse_(new_x, new_y - body->getFocus2() - 5, 50, 10);
-	beret->setColor(255, 0, 0);
+
+	body		->	setColor(0, 100, 0);
+	rear_fin	->	setColor(135, 206, 235);
+	top_fin		->	setColor(135, 206, 235);
+	bottom_fin	->	setColor(135, 206, 235);
+	beret		->	setColor(255, 0, 0);
 }
 PatrioticFish::~PatrioticFish() {}
 
 void PatrioticFish::Show() {
-	rear_fin->Show();
-	top_fin->Show();
-	bottom_fin->Show();
-	body->Show();
-	eye->Show();
-	mouth->Show();
-	beret->Show();
+	rear_fin	->	Show();
+	top_fin		->	Show();
+	bottom_fin	->	Show();
+	body		->	Show();
+	eye			->	Show();
+	mouth		->	Show();
+	beret		->	Show();
 }
 void PatrioticFish::Hide() {
-	rear_fin->Hide();
-	top_fin->Hide();
-	bottom_fin->Hide();
-	body->Hide();
-	eye->Hide();
-	mouth->Hide();
-	beret->Hide();
+	rear_fin	->	Hide();
+	top_fin		->	Hide();
+	bottom_fin	->	Hide();
+	body		->	Hide();
+	eye			->	Hide();
+	mouth		->	Hide();
+	beret		->	Hide();
 }
 void PatrioticFish::moveTo(int new_x, int new_y) {
 	Hide();	//чтобы картинка нормально отображалась
-	rear_fin->moveTo(new_x - body->getFocus1(), new_y);
-	top_fin->moveTo(new_x + 25, new_y - body->getFocus2() - 15);
-	bottom_fin->moveTo(new_x - 25, new_y + body->getFocus2() + 15);
-	body->moveTo(new_x, new_y);
-	eye->moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
-	mouth->moveTo(new_x + body->getFocus1() - 20, new_y + 10);
-	beret->moveTo(new_x, new_y - body->getFocus2() - 5);
+	rear_fin	->	moveTo(new_x - body->getFocus1(), new_y);
+	top_fin		->	moveTo(new_x + 25, new_y - body->getFocus2() - 15);
+	bottom_fin	->	moveTo(new_x - 25, new_y + body->getFocus2() + 15);
+	body		->	moveTo(new_x, new_y);
+	eye			->	moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
+	mouth		->	moveTo(new_x + body->getFocus1() - 20, new_y + 10);
+	beret		->	moveTo(new_x, new_y - body->getFocus2() - 5);
 	Show(); //убрать затирания
 }
 void PatrioticFish::patrioticForm() {
 	Hide();
-	body->setColor(0, 0, 255);
-	rear_fin->setColor(0, 0, 255);
-	top_fin->setColor(255, 255, 255);
-	bottom_fin->setColor(255, 0, 0);
+	body		->	setColor(0, 0, 255);
+	rear_fin	->	setColor(0, 0, 255);
+	top_fin		->	setColor(255, 255, 255);
+	bottom_fin	->	setColor(255, 0, 0);
 	Show();
 }
 void PatrioticFish::baseForm() {
 	Hide();
-	body->setColor(0, 100, 0);
-	rear_fin->setColor(135, 206, 235);
-	top_fin->setColor(135, 206, 235);
-	bottom_fin->setColor(135, 206, 235);
+	body		->	setColor(0, 100, 0);
+	rear_fin	->	setColor(135, 206, 235);
+	top_fin		->	setColor(135, 206, 235);
+	bottom_fin	->	setColor(135, 206, 235);
 	Show();
 }

@@ -14,13 +14,15 @@ int main() {
     Fish AFish(x, y);
     PatrioticFish BFish(400, 400);
     Rectangle(hdc, 0, 0, 1920, 1080);
+
     while(1)
     {
-        AFish.Show();
+        cout << "Выберите действие:";
+        /*AFish.Show();
         BFish.Show();
         system("pause");
         BFish.patrioticForm();
-        BFish.drag(PPM);
+        BFish.drag(PPM);*/
         //AFish.drag(PPM);
     }
 
