@@ -22,7 +22,8 @@ int main() {
         EXIT_TASK = false;
         cout << "Выберите действие: \n"
             << "1 - Создать базовую рыбу\n"
-            << "2 - Создать рыбу - патриота\n";
+            << "2 - Создать рыбу - патриота\n"
+            << "3 - Создать диск (временно)\n";
         int choice;
         cin >> choice;
         switch (choice) {
@@ -77,6 +78,13 @@ int main() {
                 }
                 }
             }
+            break;
+        }
+        case 3: {
+            cout << "Введите координаты (x,y): \n";
+            cin >> x >> y;
+            Disc CDisk(x, y, 40, 20, 4);
+            CDisk.Show();
             break;
         }
             default:
