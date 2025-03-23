@@ -78,7 +78,7 @@ public:
 };
 
 class Disc : public Point {
-private:
+protected:
 	int radius1;
 	int radius2;
 	int radius3;
@@ -98,21 +98,29 @@ public:
 
 //abstract obstacle class
 class Obstacle : public Location {
-private:
-	int* top_border;	// [x,y]
-	int* left_border;
-	int* bottom_border;
-	int* right_border;
+protected:
+	int size_x; // len
+	int size_y;	// width
 public:
-	Obstacle(int new_x, int new_y);
+	Obstacle(int new_x, int new_y, int new_szX, int new_szY);
 	~Obstacle();
 	//will be overwritten in child class
+	int  getsizeX();
+	void setsizeX(int new_szX);
+	int  getsizeY();
+	void setsizeY(int new_szY);
 	virtual void Show();
 	virtual void Hide();
-	virtual bool hasCollisionWith(Fish* fish);
 };
 
-
+class Flag : public Obstacle {
+protected:
+public:
+	Flag(int new_x, int new_y, int new_szX, int new_szY);
+	~Flag();
+	virtual void Show();
+	virtual void Hide();
+};
 
 //common fish
 class Fish {
@@ -123,6 +131,7 @@ protected:
 	Triangle* bottom_fin;
 	Circle*   eye;
 	Triangle* mouth;
+	int* borders;
 public:
 	Fish(int new_x, int new_y);
 	~Fish();
@@ -132,19 +141,23 @@ public:
 	Triangle* getBottomFin();
 	Circle*   getEye();
 	Triangle* getMouth();
+	int* getBorders();
 
 	//Удалю, если не понадобится
-	void setBody(Ellipse_* new_body);
+	/*void setBody(Ellipse_* new_body);
 	void setRearFin(Triangle* rear_fin);
 	void setTopFin(Triangle* top_fin);
 	void setBottomFin(Triangle* bottom_fin);
 	void setEye(Circle* eye);
-	void setMouth(Triangle* mouth);
+	void setMouth(Triangle* mouth);*/
 
 	virtual void Show();
 	virtual void Hide();
+	bool hasCollisionWith(Obstacle* obstacle);
 	virtual void moveTo(int new_x, int new_y); //move different parts = virtual
-	void drag(int step);
+	void drag(int step, Obstacle* obstacle = nullptr);
+	virtual void superPower();
+	virtual void baseForm();
 };
 
 class PatrioticFish : public Fish {
@@ -156,8 +169,8 @@ public:
 	virtual void Show();
 	virtual void Hide();
 	virtual void moveTo(int new_x, int new_y);
-	void patrioticForm();
-	void baseForm();
+	virtual void superPower();
+	virtual void baseForm();
 };
 
 class DiscoFish : public Fish {
@@ -169,5 +182,8 @@ public:
 	virtual void Show();
 	virtual void Hide();
 	virtual void moveTo(int new_x, int new_y);
-	void discoForm();
+	virtual void superPower();
+	virtual void baseForm();
 };
+
+
