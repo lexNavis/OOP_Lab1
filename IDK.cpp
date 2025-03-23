@@ -205,16 +205,74 @@ void Triangle::Hide() {
 //	Show();
 //}
 
+//define Disc methods
+
+Disc::Disc(int new_x, int new_y, int new_r1, int new_r2, int new_r3) : Point(new_x, new_y){
+	radius1 = new_r1;
+	radius2 = new_r2;
+	radius3 = new_r3;
+}
+Disc::~Disc() {}
+
+int Disc::getRadius1() { return radius1; }
+int Disc::getRadius2() { return radius2; }
+int Disc::getRadius3() { return radius3; }
+
+void Disc::setRadius1(int new_r1) { radius1 = new_r1; }
+void Disc::setRadius2(int new_r2) { radius2 = new_r2; }
+void Disc::setRadius3(int new_r3) { radius3 = new_r3; }
+
+void Disc::Show() {
+	//border of first circle
+	HPEN hPen = CreatePen(PS_SOLID, PEN_WIDTH + 1, RGB(0, 0, 0)); SelectObject(hdc, hPen);
+	Ellipse(hdc, x - radius1, y - radius1, x + radius1, y + radius1);
+
+	//inner part of first circle
+	HBRUSH hBrush = CreateSolidBrush(RGB(64, 64, 64));
+	SelectObject(hdc, hBrush);
+	Ellipse(hdc, x - radius1, y - radius1, x + radius1, y + radius1);
+	DeleteObject(hBrush);
+
+	//border of second circle
+	SelectObject(hdc, hPen);
+	Ellipse(hdc, x - radius2, y - radius2, x + radius2, y + radius2);
+	
+	//inner part of second circle
+	hBrush = CreateSolidBrush(RGB(192, 192, 192));
+	SelectObject(hdc, hBrush);
+	Ellipse(hdc, x - radius2, y - radius2, x + radius2, y + radius2);
+	DeleteObject(hBrush);
+
+	//border of third circle
+	SelectObject(hdc, hPen);
+	Ellipse(hdc, x - radius3, y - radius3, x + radius3, y + radius3);
+
+	//inner part of third circle
+	hBrush = CreateSolidBrush(RGB(255, 255, 255));
+	SelectObject(hdc, hBrush);
+	Ellipse(hdc, x - radius3, y - radius3, x + radius3, y + radius3);
+	DeleteObject(hBrush);
+
+	DeleteObject(hPen);
+}
+
+void Disc::Hide() {
+	HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255));
+	SelectObject(hdc, hBrush);
+	Ellipse(hdc, x - radius1, y - radius1, x + radius1, y + radius1);
+	DeleteObject(hBrush);
+}
+
 //defining Fish methods
 Fish::Fish(int new_x, int new_y) {
-	body = new Ellipse_(new_x, new_y, 100, 40);
+	body =		 new Ellipse_(new_x, new_y, 100, 40);
 	int f1 = body->getFocus1();
 	int f2 = body->getFocus2();
-	rear_fin = new Triangle(new_x - f1, new_y, 70, 100); //height = 70 (35=height/2), base = 100
-	top_fin = new Triangle(new_x + 25, new_y - f2 - 15, 50, 60); //height = 50, base = 100
+	rear_fin =	 new Triangle(new_x - f1, new_y, 70, 100); //height = 70 (35=height/2), base = 100
+	top_fin =	 new Triangle(new_x + 25, new_y - f2 - 15, 50, 60); //height = 50, base = 100
 	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, -50, -60); //height = 70, base = 100
-	eye = new Circle(new_x + f1 / 2 + 30, new_y - 10, 7);
-	mouth = new Triangle(new_x + f1 - 20, new_y + 10, -30, -8);
+	eye =		 new Circle(new_x + f1 / 2 + 30, new_y - 10, 7);
+	mouth =		 new Triangle(new_x + f1 - 20, new_y + 10, -30, -8);
 
 	//Setting color
 	body		->	setColor(128, 128, 128);
@@ -296,7 +354,6 @@ void Fish::setMouth(Triangle* new_mouth)			{ mouth = new_mouth; }
 
 PatrioticFish::PatrioticFish(int new_x, int new_y) : Fish(new_x, new_y) {
 	beret = new Ellipse_(new_x, new_y - body->getFocus2() - 5, 50, 10);
-
 	body		->	setColor(0, 100, 0);
 	rear_fin	->	setColor(135, 206, 235);
 	top_fin		->	setColor(135, 206, 235);
