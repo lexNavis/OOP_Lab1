@@ -257,6 +257,11 @@ void Disc::Show() {
 }
 
 void Disc::Hide() {
+	HPEN hPen = CreatePen(PS_SOLID, PEN_WIDTH + 1, RGB(255, 255, 255));
+	SelectObject(hdc, hPen);
+	Ellipse(hdc, x - radius1, y - radius1, x + radius1, y + radius1);
+	DeleteObject(hPen);
+
 	HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255));
 	SelectObject(hdc, hBrush);
 	Ellipse(hdc, x - radius1, y - radius1, x + radius1, y + radius1);
@@ -406,4 +411,87 @@ void PatrioticFish::baseForm() {
 	top_fin		->	setColor(135, 206, 235);
 	bottom_fin	->	setColor(135, 206, 235);
 	Show();
+}
+
+//Defininition of DiscoFish methods
+
+DiscoFish::DiscoFish(int new_x, int new_y) : Fish(new_x, new_y) {
+	int radius1 = body->getFocus2() - 15;
+	disc = new Disc(new_x, new_y, radius1, radius1 / 2, 4); //цвет задается по умолчанию
+		
+	body		->	setColor(255, 255, 0);
+	rear_fin	->	setColor(255, 165, 0);
+	top_fin		->	setColor(255, 165, 0);
+	bottom_fin	->	setColor(255, 165, 0);
+}
+
+DiscoFish::~DiscoFish() {}
+
+void DiscoFish::Show() {
+	rear_fin	->	Show();
+	top_fin		->	Show();
+	bottom_fin	->	Show();
+	body		->	Show();
+	eye			->	Show();
+	mouth		->	Show();
+	disc		->	Show();
+}
+void DiscoFish::Hide() {
+	rear_fin	->	Hide();
+	top_fin		->	Hide();
+	bottom_fin	->	Hide();
+	body		->	Hide();
+	eye			->	Hide();
+	mouth		->	Hide();
+	disc		->	Hide();
+}
+
+void DiscoFish::moveTo(int new_x, int new_y) {
+	Hide();	//чтобы картинка нормально отображалась
+	rear_fin	->	moveTo(new_x - body->getFocus1(), new_y);
+	top_fin		->	moveTo(new_x + 25, new_y - body->getFocus2() - 15);
+	bottom_fin	->	moveTo(new_x - 25, new_y + body->getFocus2() + 15);
+	body		->	moveTo(new_x, new_y);
+	eye			->	moveTo(new_x + (body->getFocus1()) / 2 + 30, new_y - 10);
+	mouth		->	moveTo(new_x + body->getFocus1() - 20, new_y + 10);
+	disc		->	moveTo(new_x, new_y);
+	Show(); //убрать затирания
+}
+
+void DiscoFish::discoForm() { //смена цвета и движения из стороны в сторону
+	while (1) {
+		if (KEY_DOWN(VK_ESCAPE)) {
+			body		->	setColor(255, 255, 0);
+			rear_fin	->	setColor(255, 165, 0);
+			top_fin		->	setColor(255, 165, 0);
+			bottom_fin	->	setColor(255, 165, 0);
+			Show();
+			break;
+		}
+		Sleep(200);
+		moveTo(getBody()->getX() - 100, getBody()->getY() - 100);
+		Sleep(200);
+		Hide();
+		body		->	setColor(255, 0, 0);
+		rear_fin	->	setColor(0, 255, 0);
+		top_fin		->	setColor(0, 0, 255);
+		bottom_fin  ->	setColor(127, 127, 127);
+		moveTo(getBody()->getX() + 100, getBody()->getY() - 100);
+
+		Sleep(200);
+		Hide();
+		body		->	setColor(0, 255, 0);
+		rear_fin	->	setColor(0, 0, 255);
+		top_fin		->	setColor(127, 127, 127);
+		bottom_fin  ->	setColor(255, 0, 0);
+		moveTo(getBody()->getX() - 100, getBody()->getY() + 100);
+
+		Sleep(200);
+		Hide();
+		body		->	setColor(0, 0, 255);
+		rear_fin	->	setColor(127, 127, 127);
+		top_fin		->	setColor(255, 0, 0);
+		bottom_fin  ->	setColor(0, 255, 0);
+		moveTo(getBody()->getX() + 100, getBody()->getY() + 100);
+	}
 }
