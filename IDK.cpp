@@ -276,11 +276,12 @@ Fish::Fish(int new_x, int new_y) {
 	int rear_fin_height = 70, rear_fin_base = 100;
 	int top_fin_height = 50, top_fin_base = 60;
 	int bottom_fin_height = -50, bottom_fin_base = -60;
+	int mouth_height = -30, mouth_base = -8;
 	rear_fin =	 new Triangle(new_x - f1, new_y, rear_fin_height, rear_fin_base); //height = 70 (35=height/2), base = 100
-	top_fin =	 new Triangle(new_x + 25, new_y - f2 - 15, top_fin_height, top_fin_base); //height = 50, base = 100
-	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, bottom_fin_height, bottom_fin_base); //height = 70, base = 100
+	top_fin =	 new Triangle(new_x + 25, new_y - f2 - 15, top_fin_height, top_fin_base); //height = 50, base = 60
+	bottom_fin = new Triangle(new_x - 25, new_y + f2 + 15, bottom_fin_height, bottom_fin_base); //height = -50, base = -60
 	eye =		 new Circle(new_x + f1 / 2 + 30, new_y - 10, 7);
-	mouth =		 new Triangle(new_x + f1 - 20, new_y + 10, -30, -8);
+	mouth =		 new Triangle(new_x + f1 - 20, new_y + 10, mouth_height, mouth_base);
 	//мб уберу короче
 	borders	=	 new int[4]; // { x1, x2, y1, y2 }
 	borders[0] = { new_x - f1 - rear_fin_height/2};		//основание заднего плавника
@@ -327,11 +328,10 @@ bool Fish::hasCollisionWith(Obstacle* obstacle) {	// x1 <= x <= x2 && y1 <= y <=
 	int rear_fin_height = getRearFin()->getHeight(), rear_fin_base = getRearFin()->getBase();
 	int top_fin_height = getTopFin()->getHeight(), top_fin_base = getTopFin()->getBase();
 	int bottom_fin_height = getBottomFin()->getHeight(), bottom_fin_base = getBottomFin()->getBase();
-	//Оставить ли эту приколюху с массивом?
 	borders[0] = { getBody()->getX() - f1 - rear_fin_height / 2};		//основание заднего плавника
 	borders[1] = { getBody()->getX() + f1 };							//перед рыбы
 	borders[2] = { getBody()->getY() - f2 - 15 - top_fin_base / 2 };	//верх
-	borders[3] = { getBody()->getY() + f2 + 15 + bottom_fin_base / 2 };	//низ
+	borders[3] = { getBody()->getY() + f2 + 15 + abs(bottom_fin_base) / 2 };//низ он отрицательный надо abs взять
 
 	int x = obstacle->getX(), y = obstacle->getY();
 	int size_x = obstacle->getsizeX(), size_y = obstacle->getsizeY();
@@ -544,10 +544,10 @@ void DiscoFish::superPower() { //смена цвета и движения из стороны в сторону
 	}
 }
 void DiscoFish::baseForm() {
-	body->setColor(255, 255, 0);
-	rear_fin->setColor(255, 165, 0);
-	top_fin->setColor(255, 165, 0);
-	bottom_fin->setColor(255, 165, 0);
+	body		->	setColor(255, 255, 0);
+	rear_fin	->	setColor(255, 165, 0);
+	top_fin		->	setColor(255, 165, 0);
+	bottom_fin	->	setColor(255, 165, 0);
 }
 
 //defining Obstacle methods
@@ -562,7 +562,8 @@ int  Obstacle::getsizeX() { return size_x; }
 int  Obstacle::getsizeY() { return size_y; }
 void Obstacle::setsizeX(int new_szX) { size_x = new_szX; }
 void Obstacle::setsizeY(int new_szY) { size_y = new_szY; }
-//defining flag methods
+
+//defining Flag methods
 Flag::Flag(int new_x, int new_y, int new_szX, int new_szY) : Obstacle(new_x, new_y, new_szX, new_szY) {
 	
 }
